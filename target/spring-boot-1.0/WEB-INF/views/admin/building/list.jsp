@@ -400,27 +400,29 @@
         var buildingIds = $('#buildingList').find('tbody input[type=checkbox]:checked').map(function(){
             return $(this).val();
         }).get();
-        data['buildingIds'] = buildingIds;
+        data['ids'] = buildingIds;
         deleteBuilding(data);
 
     });
     function btnDeleteBuilding(buildingId){
         var data = {};
-        data[buildingId] = buildingId;
+        var id = [buildingId];
+        data['ids'] = id;
         deleteBuilding(data);
     }
     function deleteBuilding(data){
         $.ajax({
             type: "DELETE",
-            url: "http://localhost:8081/api/building",
-            data: JSON.stringify(data),
+            url: "/api/buildings",
+            data: JSON.stringify(data['ids']),
             contentType: "application/json",
-            dataType: "json",
-            success:function(response){
-                console.log("success");
+            dataType: "text",
+            success:(response)=>{
+                alert(response);
+                window.location.replace("/admin/building-list");
             },
             error : function(response){
-                console.log("failed");
+                alert("Xóa không thành công");
                 console.log(response);
             }
         });
