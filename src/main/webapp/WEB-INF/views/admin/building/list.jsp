@@ -254,7 +254,7 @@
                                         <span class="lbl"></span>
                                     </label>
                                 </td>
-                                <td>ACM Building</td>
+                                <td>${item.name}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@include file="/common/taglib.jsp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:url var="buildingAPI" value="api/buildings"/>
 <html>
 <head>
     <title>Danh sách tòa nhà</title>
@@ -253,7 +254,7 @@
                                         <span class="lbl"></span>
                                     </label>
                                 </td>
-                                <td>ACM Building</td>
+                                <td>${item.name}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -335,7 +336,7 @@
                         <tbody>
                         <tr>
                             <td class="center">
-                                <input type="checkbox" id="checkbox_1" value= "1">
+                                <input type="checkbox" id="checkbox_1" value= "1" checked>
                             </td>
                             <td>Nguyen Van A</td>
                         </tr>
@@ -369,6 +370,28 @@
     function assignmentBuilding(buildingId){
         $('#assignmentBuildingModal').modal();
         $('#buildingId').val(buildingId);
+        loadStaffs(buildingId);
+    }
+    function loadStaffs(buildingId){
+        $.ajax({
+            type: "GET",
+            url: "${buildingAPI}/" + buildingId + "/staffs",
+            dataType: "json",
+            success:(response)=>{
+               var row = '';
+               $.each(response.data , function (index,item){
+                  row += '<tr>';
+                  row += '<td class="center"><input type="checkbox" value = '  + item.staffId + 'id="checkbox_"' + item.staffId + '"  ' + item.checked + '/></td>';
+                  row += '<td class="center">' + item.fullName + '</td>';
+                  row +='</tr>';
+               });
+               $('#staffList tbody').html(row);
+            },
+            error : function(response){
+                alert("Xóa không thành công");
+                console.log(response);
+            }
+        });
     }
     $('#btnAssignBuilding').click(function(e){
         e.preventDefault();
@@ -381,16 +404,15 @@
 
         $.ajax({
             type: "PUT",
-            url: "http://localhost:8081/api/building",
+            url: "${buildingAPI}",
             data: JSON.stringify(data),
             contentType: "application/json",
-            dataType: "json",
-            success:function(response){
-                console.log("success");
+            // dataType: "text",
+            success:(response)=>{
+                alert("Giao tòa nhà thành công!");
             },
             error : function(response){
-                console.log("failed");
-                console.log(response);
+                alert("Giao tòa nhà không thành công!");
             }
         });
     });
@@ -413,7 +435,7 @@
     function deleteBuilding(data){
         $.ajax({
             type: "DELETE",
-            url: "/api/buildings",
+            url: "${buildingAPI}",
             data: JSON.stringify(data['ids']),
             contentType: "application/json",
             dataType: "text",
