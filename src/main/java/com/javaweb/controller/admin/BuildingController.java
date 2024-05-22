@@ -10,6 +10,7 @@ import com.javaweb.model.response.BuildingSearchResponse;
 import com.javaweb.service.IBuildingService;
 import com.javaweb.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,9 +29,9 @@ public class BuildingController {
     @Autowired
     private IBuildingService buildingService;
     @GetMapping(value="/admin/building-list")
-    public ModelAndView buildingList(@ModelAttribute("modelSearch")BuildingSearchRequest buildingSearchRequest){
+    public ModelAndView buildingList(@ModelAttribute("modelSearch")BuildingSearchRequest buildingSearchRequest, Pageable pageable){
         ModelAndView mav = new ModelAndView("admin/building/list");
-        List<BuildingSearchResponse> buildings = buildingService.findAll(buildingSearchRequest);
+        List<BuildingSearchResponse> buildings = buildingService.findAllByAttribute(buildingSearchRequest, pageable);
         mav.addObject("buildings", buildings);
         mav.addObject("staffs", userService.getStaff());
         mav.addObject("districtCode" , districtCode.district());
