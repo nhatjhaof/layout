@@ -30,12 +30,8 @@ public class BuildingController {
     @GetMapping(value="/admin/building-list")
     public ModelAndView buildingList(@ModelAttribute("modelSearch")BuildingSearchRequest buildingSearchRequest){
         ModelAndView mav = new ModelAndView("admin/building/list");
-        BuildingSearchResponse a = new BuildingSearchResponse();
-        a.setName("aaaaa");
-        List<BuildingSearchResponse> mock = new ArrayList<>();
-        mock.add(a);
-        // List<BuildingSearchResponse> buildings = buildingService.findAll(buildingSearchRequest);
-        mav.addObject("buildings", mock);
+        List<BuildingSearchResponse> buildings = buildingService.findAll(buildingSearchRequest);
+        mav.addObject("buildings", buildings);
         mav.addObject("staffs", userService.getStaff());
         mav.addObject("districtCode" , districtCode.district());
         mav.addObject("typeCodes", buildingType.getTypeCode());

@@ -255,7 +255,7 @@
                                     </label>
                                 </td>
                                 <td>${item.name}</td>
-                                <td></td>
+                                <td>${item.ban fix query di nhe , ok  }</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
